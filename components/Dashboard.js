@@ -49,12 +49,26 @@ function Dashboard() {
       ) {
         console.log("a");
         if (!outgoingData.find((item) => loadedData[0] === item[0])) {
-          outgoingData.push([data[i]]);
+          // const d = new Date(data[i].timestamp);
+          outgoingData.push([
+            data[i].sender,
+            data[i].receiver,
+            data[i].flowOperator,
+            data[i].totalAmountStreamedUntilTimestamp,
+            data[i].timestamp,
+          ]);
         }
       } else {
         console.log("hi");
         if (!incomingData.find((item) => loadedData[0] === item[0])) {
-          incomingData.push([data[i]]);
+          // const d = new Date(data[i].timestamp);
+          incomingData.push([
+            data[i].sender,
+            data[i].receiver,
+            data[i].flowOperator,
+            data[i].totalAmountStreamedUntilTimestamp,
+            data[i].timestamp,
+          ]);
         }
       }
     }
@@ -276,38 +290,43 @@ function Dashboard() {
                                   <th>To / From</th>
                                   <th>All Time Flow</th>
                                   <th>Flow Rate</th>
+                                  <th>Flow Operator</th>
                                   <th>Start / End Date</th>
                                   <th></th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {dropDownOutgoing && outgoingData.length > 0
-                                  ? outgoingData.map((item, key) => {
-                                      return (
-                                        <tr>
-                                          <td>{item[0].receiver}</td>
-                                          <td>something</td>
-                                          <td>{item[0].flowRate}</td>
-                                          <td>something</td>
-                                          <td>something</td>
-                                        </tr>
-                                      );
-                                    })
-                                  : null}
+                                {dropDownOutgoing && outgoingData.length > 0 ? (
+                                  outgoingData.map((item, key) => {
+                                    return (
+                                      <tr>
+                                        <td>{item[1]}</td>
+                                        <td>{item[3] / 10 ** 18}</td>
+                                        <td>-</td>
+                                        <td>{item[2]}</td>
+                                        <td>{item[4]}</td>
+                                      </tr>
+                                    );
+                                  })
+                                ) : (
+                                  <h1>No Data</h1>
+                                )}
                                 {/**************incoming flow data************/}
-                                {dropDownIncoming && incomingData.length > 0
-                                  ? incomingData.map((item, key) => {
-                                      return (
-                                        <tr>
-                                          <td>{item[0].receiver}</td>
-                                          <td>something</td>
-                                          <td>{item[0].flowRate}</td>
-                                          <td>something</td>
-                                          <td>something</td>
-                                        </tr>
-                                      );
-                                    })
-                                  : null}
+                                {dropDownIncoming && incomingData.length > 0 ? (
+                                  incomingData.map((item, key) => {
+                                    return (
+                                      <tr>
+                                        <td>{item[0]}</td>
+                                        <td>{item[3] / 10 ** 18}</td>
+                                        <td>-</td>
+                                        <td>{item[2]}</td>
+                                        <td>{item[4]}</td>
+                                      </tr>
+                                    );
+                                  })
+                                ) : (
+                                  <h1>No Data</h1>
+                                )}
                                 {/* <tr>
                                   <td>something</td>
                                   <td>something</td>
