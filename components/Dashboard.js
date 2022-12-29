@@ -43,7 +43,10 @@ function Dashboard() {
     const data = loadedData.data.flowUpdatedEvents;
     console.log(loadedData);
     for (let i = 0; i < data.length; i++) {
-      if (data[i].sender == address.toLowerCase()) {
+      if (
+        data[i].sender ==
+        "0xf96b82579B8f4E0357908AE50a10f2287A19Baa9".toLowerCase()
+      ) {
         console.log("a");
         if (!outgoingData.find((item) => loadedData[0] === item[0])) {
           outgoingData.push([data[i]]);
@@ -57,6 +60,7 @@ function Dashboard() {
     }
     setOutgoingData(outgoingData);
     setIncomingData(incomingData);
+    console.log("outgoingdata");
     console.log(outgoingData);
     console.log(incomingData);
   };
@@ -277,13 +281,40 @@ function Dashboard() {
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
+                                {dropDownOutgoing && outgoingData.length > 0
+                                  ? outgoingData.map((item, key) => {
+                                      return (
+                                        <tr>
+                                          <td>{item[0].receiver}</td>
+                                          <td>something</td>
+                                          <td>{item[0].flowRate}</td>
+                                          <td>something</td>
+                                          <td>something</td>
+                                        </tr>
+                                      );
+                                    })
+                                  : null}
+                                {/**************incoming flow data************/}
+                                {dropDownIncoming && incomingData.length > 0
+                                  ? incomingData.map((item, key) => {
+                                      return (
+                                        <tr>
+                                          <td>{item[0].receiver}</td>
+                                          <td>something</td>
+                                          <td>{item[0].flowRate}</td>
+                                          <td>something</td>
+                                          <td>something</td>
+                                        </tr>
+                                      );
+                                    })
+                                  : null}
+                                {/* <tr>
                                   <td>something</td>
                                   <td>something</td>
                                   <td>something</td>
                                   <td>something</td>
                                   <td>something</td>
-                                </tr>
+                                </tr> */}
                               </tbody>
                             </table>
                           </div>
