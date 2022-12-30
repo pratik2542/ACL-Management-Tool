@@ -169,10 +169,14 @@ function Dashboard() {
           {/* <button onClick={() => loadData()}>click</button> */}
           {/* <p>Connect your wallet, view any wallet, or take a look around!</p> */}
           <div className="db-box-parent">
-            <h1 className="super-token">"Super Token"</h1>
+            {/* <h1 className="super-token">"Super Token"</h1> */}
+
             <div className="db-box">
-              <div className="db-header">
-                <div className="connect-wallet">
+              <div className="db-header flex justify-between w-full items-center">
+                <div className="dashboard-title">
+                  <span className="super-token-title">Super Token</span>
+                </div>
+                <div className="connect-wallet ">
                   <ConnectButton
                     accountStatus={{
                       smallScreen: "avatar",
@@ -314,7 +318,7 @@ function Dashboard() {
                             <table className="dropdown-table">
                               <thead>
                                 <tr>
-                                  <td colSpan={5} className="dropdown-table-td">
+                                  <td colSpan={6} className="dropdown-table-td">
                                     <div className="dropdown-row">
                                       <div className="dropdown-btn-parent">
                                         <button
