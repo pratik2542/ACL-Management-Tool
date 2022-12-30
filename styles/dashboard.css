@@ -83,13 +83,6 @@ div.grid-sub span.grid-sub-info {
   display: block;
 }
 
-.db-sub .connect-wallet {
-  /* max-width: max-content;
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 32px; */
-}
-
 .db-sub .db-box-parent {
   width: 100%;
   max-width: 1000px;
