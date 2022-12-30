@@ -103,6 +103,8 @@ function AuthorizeFullControl() {
         /> */}
             <StyledSelect
               options={options}
+              disabled
+              placeholder="fDAIx"
               values={[]}
               labelField="username"
               valueField="username"

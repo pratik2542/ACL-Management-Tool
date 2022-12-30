@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from "react-dropdown-select";
 import options from "../data/options";
 import styled from "@emotion/styled";
@@ -7,6 +7,8 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import { recoverAddress } from "ethers/lib/utils.js";
 
 function SendStream() {
+  const [tokenValue, setTokenValue] = useState("Enter Token Amount in Wei");
+
   //integration
   const sendStreamWithOperator = async () => {
     const senderAddress = document.getElementById("senderWalletAddress").value;
@@ -101,6 +103,8 @@ function SendStream() {
         /> */}
             <StyledSelect
               options={options}
+              disabled
+              placeholder="fDAIx"
               values={[]}
               labelField="username"
               valueField="username"
@@ -114,9 +118,11 @@ function SendStream() {
             <h4>Flow Rate ( / second )</h4>
             <input
               type="number"
-              placeholder="Flow Rate"
+              value={tokenValue}
+              placeholder="Enter Token Amount in Wei"
               className="w-full input placeholder-gray-700"
               id="flowRate"
+              onChange={(e) => setTokenValue(Math.floor(e.target.value))}
             />
           </div>
         </div>

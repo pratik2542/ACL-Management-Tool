@@ -4,8 +4,16 @@ import options from "../data/options";
 import styled from "@emotion/styled";
 import { ethers } from "ethers";
 import { Framework } from "@superfluid-finance/sdk-core";
+import { permissions } from "../data/permissions";
+
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
 
 function SetPermission() {
+  // usestate for input permission value
+
+  const [permissionValue, setPermissionValue] = useState();
+  const [tokenValue, setTokenValue] = useState("Enter Token Amount in Wei");
   //integration
   const updateFlowPermission = async () => {
     // console.log("Inside");
@@ -69,6 +77,10 @@ function SetPermission() {
 		}
 	`}
   `;
+
+  const onChangePermissionsInput = (e) => {
+    setPermissionValue(e);
+  };
   return (
     <div className="main-container">
       <div className="box-container">
@@ -87,17 +99,34 @@ function SetPermission() {
         <div className="input-parent">
           <h4>Permissions</h4>
           <StyledSelect
-            className="placeholder-gray-700"
-            options={options}
-            placeholder="Select A Permission"
+            options={permissions}
+            placeholder="Select Permission"
             values={[]}
-            labelField="username"
-            valueField="username"
-            searchBy="username"
+            labelField="label"
+            valueField="value"
+            searchBy="value"
             onChange={(value) => console.log(value)}
             color={"#10bb34"}
             minHeight={"54px"}
           />
+          {/* <StyledSelect
+            className="placeholder-gray-700"
+            options={permissions}
+            placeholder="Select A Permission"
+            values={[]}
+            labelField="name"
+            valueField="value"
+            searchBy="name"
+            onChange={(value) => onChangePermissionsInput(value)}
+            color={"#10bb34"}
+            minHeight={"54px"}
+          /> */}
+          {/* <Dropdown
+            options={permissions}
+            onChange={(value) => console.log(value)}
+            value={permissions[0].label}
+            placeholder="Select an option"
+          /> */}
         </div>
         <div className="input-parent flex justify-between">
           <div className="super-token-input">
@@ -108,11 +137,13 @@ function SetPermission() {
               className="w-full input placeholder-gray-700"
             /> */}
             <StyledSelect
-              options={options}
+              options={permissions}
+              disabled
               values={[]}
-              labelField="username"
-              valueField="username"
-              searchBy="username"
+              labelField="label"
+              valueField="value"
+              placeholder="fDAIx"
+              searchBy="value"
               onChange={(value) => console.log(value)}
               color={"#10bb34"}
               minHeight={"54px"}
@@ -122,9 +153,11 @@ function SetPermission() {
             <h4>Flow Rate ( / second )</h4>
             <input
               type="number"
-              placeholder="Flow Rate"
+              value={tokenValue}
+              placeholder="Enter Token Amount in Wei"
               className="w-full input placeholder-gray-700"
               id="flowRate"
+              onChange={(e) => setTokenValue(Math.floor(e.target.value))}
             />
           </div>
         </div>

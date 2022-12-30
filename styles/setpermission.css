@@ -93,3 +93,37 @@ input.react-dropdown-select-input {
 .set-permission-button button:hover {
   background-color: rgb(12, 149, 42);
 }
+
+.Dropdown-control {
+  border-radius: 10px !important;
+  min-height: 54px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 16px !important;
+}
+
+.Dropdown-control .Dropdown-arrow-wrapper {
+  position: relative;
+}
+.Dropdown-control .Dropdown-arrow-wrapper .Dropdown-arrow {
+  position: relative;
+  right: auto;
+  top: auto;
+}
+
+.Dropdown-root .Dropdown-menu {
+  border-radius: 10px;
+  padding: 6px 16px !important;
+}
+
+select#permissions:focus-visible {
+  border: 1px solid #10bb35;
+  outline: #10bb35;
+}
+
+.css-kov7rt-ReactDropdownSelect {
+  border-radius: 10px !important;
+  min-height: 54px !important;
+  color: black !important;
+}
