@@ -2,6 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { createClient } from "urql";
+import { getTransactionDescription } from "@superfluid-finance/sdk-core";
 
 function Dashboard() {
   const { address, isConnected } = useAccount();
@@ -13,14 +14,28 @@ function Dashboard() {
   const [dropDownOutgoing, setDropDownOutgoing] = useState(true);
 
   //integration
+  const [allData, setAllData] = useState([]);
   const [incomingData, setIncomingData] = useState([]);
   const [outgoingData, setOutgoingData] = useState([]);
-
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const loadData = async () => {
     const APIURL =
       "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli";
 
-    const tokensQuery = `
+    const tokensQuery_outgoing = `
     query {
     flowUpdatedEvents(
       where: {sender: "0xf96b82579B8f4E0357908AE50a10f2287A19Baa9"}
@@ -36,52 +51,108 @@ function Dashboard() {
     }
     }
   `;
+
+    const tokensQuery_incoming = `
+    query {
+    flowUpdatedEvents(
+      where: {receiver: "0xf96b82579B8f4E0357908AE50a10f2287A19Baa9"}
+      orderBy: timestamp
+    ) {
+      timestamp
+      sender
+      receiver
+      flowRate
+      totalAmountStreamedUntilTimestamp
+      flowOperator
+      token
+    }
+    }
+  `;
+
     const client = createClient({
       url: APIURL,
     });
-    const loadedData = await client.query(tokensQuery).toPromise();
-    const data = loadedData.data.flowUpdatedEvents;
-    console.log(loadedData);
+    const loadedData_outgoing = await client
+      .query(tokensQuery_outgoing)
+      .toPromise();
+
+    const loadedData_incoming = await client
+      .query(tokensQuery_incoming)
+      .toPromise();
+
+    const data = loadedData_outgoing.data.flowUpdatedEvents;
+
+    const data1 = loadedData_incoming.data.flowUpdatedEvents;
+
+    console.log(loadedData_outgoing);
+    console.log(loadedData_incoming);
     for (let i = 0; i < data.length; i++) {
-      if (
-        data[i].sender ==
-        "0xf96b82579B8f4E0357908AE50a10f2287A19Baa9".toLowerCase()
-      ) {
-        console.log("a");
-        if (!outgoingData.find((item) => loadedData[0] === item[0])) {
-          // const d = new Date(data[i].timestamp);
-          outgoingData.push([
-            data[i].sender,
-            data[i].receiver,
-            data[i].flowOperator,
-            data[i].totalAmountStreamedUntilTimestamp,
-            data[i].timestamp,
-          ]);
-        }
-      } else {
-        console.log("hi");
-        if (!incomingData.find((item) => loadedData[0] === item[0])) {
-          // const d = new Date(data[i].timestamp);
-          incomingData.push([
-            data[i].sender,
-            data[i].receiver,
-            data[i].flowOperator,
-            data[i].totalAmountStreamedUntilTimestamp,
-            data[i].timestamp,
-          ]);
-        }
+      if (!outgoingData.find((item) => loadedData_outgoing[0] === item[0])) {
+        const d = new Date(parseInt(data[i].timestamp) * 1000);
+        const date =
+          String(d.getDate()) +
+          " " +
+          String(monthNames[d.getMonth()]) +
+          ". " +
+          String(d.getFullYear());
+        outgoingData.push([
+          data[i].sender,
+          data[i].receiver,
+          data[i].flowOperator,
+          parseFloat(
+            data[i].totalAmountStreamedUntilTimestamp / 10 ** 18
+          ).toFixed(15),
+          date,
+        ]);
+        allData.push([
+          data[i].receiver,
+          data[i].flowOperator,
+          parseFloat(
+            data[i].totalAmountStreamedUntilTimestamp / 10 ** 18
+          ).toFixed(15),
+          date,
+          true,
+        ]);
       }
     }
+
+    for (let i = 0; i < data1.length; i++) {
+      if (!incomingData.find((item) => loadedData_incoming[0] === item[0])) {
+        const d = new Date(parseInt(data1[i].timestamp) * 1000);
+        const date =
+          String(d.getDate()) +
+          " " +
+          String(monthNames[d.getMonth()]) +
+          ". " +
+          String(d.getFullYear());
+        incomingData.push([
+          data1[i].sender,
+          data1[i].receiver,
+          data1[i].flowOperator,
+          parseFloat(
+            data1[i].totalAmountStreamedUntilTimestamp / 10 ** 18
+          ).toFixed(15),
+          date,
+        ]);
+        allData.push([
+          data1[i].sender,
+          data1[i].flowOperator,
+          parseFloat(
+            data1[i].totalAmountStreamedUntilTimestamp / 10 ** 18
+          ).toFixed(15),
+          date,
+          false,
+        ]);
+      }
+    }
+
     setOutgoingData(outgoingData);
     setIncomingData(incomingData);
-    console.log("outgoingdata");
+    setAllData(allData);
     console.log(outgoingData);
     console.log(incomingData);
+    console.log(allData);
   };
-
-  // useEffect(() => {
-  //   loadData();
-  // }, []);
 
   useEffect(() => {
     setDropDown(false);
@@ -296,37 +367,79 @@ function Dashboard() {
                                 </tr>
                               </thead>
                               <tbody>
-                                {dropDownOutgoing && outgoingData.length > 0 ? (
-                                  outgoingData.map((item, key) => {
-                                    return (
-                                      <tr>
-                                        <td>{item[1]}</td>
-                                        <td>{item[3] / 10 ** 18}</td>
-                                        <td>-</td>
-                                        <td>{item[2]}</td>
-                                        <td>{item[4]}</td>
-                                      </tr>
-                                    );
-                                  })
-                                ) : (
-                                  <h1>No Data</h1>
-                                )}
+                                {/**************all flow data************/}
+                                {dropDownAll && allData.length > 0
+                                  ? allData.map((item, key) => {
+                                      return (
+                                        <tr>
+                                          <td>
+                                            {item[4] ? (
+                                              <h6>
+                                                -&gt;&nbsp;{item[0].slice(0, 5)}
+                                                ...
+                                                {item[0].slice(38, 42)}
+                                              </h6>
+                                            ) : (
+                                              <h6>
+                                                &lt;-&nbsp;{item[0].slice(0, 5)}
+                                                ...
+                                                {item[0].slice(38, 42)}
+                                              </h6>
+                                            )}
+                                          </td>
+                                          <td>{item[2]}</td>
+                                          <td>-</td>
+                                          <td>
+                                            {item[1].slice(0, 5)}...
+                                            {item[1].slice(38, 42)}
+                                          </td>
+                                          <td>{item[3]}</td>
+                                        </tr>
+                                      );
+                                    })
+                                  : null}
+                                {/**************outgoing flow data************/}
+                                {dropDownOutgoing && outgoingData.length > 0
+                                  ? outgoingData.map((item, key) => {
+                                      return (
+                                        <tr>
+                                          <td>
+                                            -&gt;&nbsp;
+                                            {item[1].slice(0, 5)}...
+                                            {item[1].slice(38, 42)}
+                                          </td>
+                                          <td>{item[3]}</td>
+                                          <td>-</td>
+                                          <td>
+                                            {item[2].slice(0, 5)}...
+                                            {item[2].slice(38, 42)}
+                                          </td>
+                                          <td>{item[4]}</td>
+                                        </tr>
+                                      );
+                                    })
+                                  : null}
                                 {/**************incoming flow data************/}
-                                {dropDownIncoming && incomingData.length > 0 ? (
-                                  incomingData.map((item, key) => {
-                                    return (
-                                      <tr>
-                                        <td>{item[0]}</td>
-                                        <td>{item[3] / 10 ** 18}</td>
-                                        <td>-</td>
-                                        <td>{item[2]}</td>
-                                        <td>{item[4]}</td>
-                                      </tr>
-                                    );
-                                  })
-                                ) : (
-                                  <h1>No Data</h1>
-                                )}
+                                {dropDownIncoming && incomingData.length > 0
+                                  ? incomingData.map((item, key) => {
+                                      return (
+                                        <tr>
+                                          <td>
+                                            &lt;-&nbsp;
+                                            {item[0].slice(0, 5)}...
+                                            {item[0].slice(38, 42)}
+                                          </td>
+                                          <td>{item[3]}</td>
+                                          <td>-</td>
+                                          <td>
+                                            {item[2].slice(0, 5)}...
+                                            {item[2].slice(38, 42)}
+                                          </td>
+                                          <td>{item[4]}</td>
+                                        </tr>
+                                      );
+                                    })
+                                  : null}
                                 {/* <tr>
                                   <td>something</td>
                                   <td>something</td>
