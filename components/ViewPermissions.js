@@ -39,7 +39,7 @@ function ViewPermissions({ setViewPermissions, setRevokeFC, setOperatorAdd }) {
       const query1 = `
         query {
           flowOperators(
-            where: {sender:"${account}"}
+            where: {sender: "${address}"}
           ) {
             flowOperator
             permissions
@@ -56,16 +56,17 @@ function ViewPermissions({ setViewPermissions, setRevokeFC, setOperatorAdd }) {
       console.log(account);
 
       const final_data = result.data.flowOperators;
+      console.log(final_data);
       data.push(final_data);
       setData(data);
       setLoading(false);
-      console.log(data[0]);
+      console.log(data);
     }
   };
 
   useEffect(() => {
     getFlowOperatorData();
-  });
+  }, [address]);
   if (!loading) {
     return (
       <div className="main-container">
