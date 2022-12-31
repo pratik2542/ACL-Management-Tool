@@ -184,7 +184,7 @@ export default function Home() {
 
             <div className="flex  min-h-screen">
               {/* ****************main left panel************** */}
-              <div className="min-h-screen w-[300px] border-r-[1px] py-2 px-3 bg-white pt-[100px]">
+              <div className="min-h-screen w-[300px] border-r-[1px] py-2 px-4 bg-white pt-[100px]">
                 <ConnectWalletCustom />
                 <ul className="flex flex-col list-none cursor-pointer py-4 gap-[10px]">
                   <div
