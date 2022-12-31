@@ -528,9 +528,9 @@ function Dashboard() {
     <div className="db-main">
       <div className="db-sub">
         <h1>Connect to Superfluid</h1>
-        <p>Connect your wallet, view any wallet, or take a look around!</p>
+        <p>Connect your wallet or take a look around!</p>
         <div className="db-grid-sub w-[70%] mx-auto my-0">
-          <div className="grid-sub min-h-[120px]">
+          <div className="grid-sub min-h-[170px]">
             <span className="grid-sub-title">Set Permissions</span>
             <span className="grid-sub-info">Update Operator Permissions</span>
             <div className="flex items-center justify-center mt-4">
@@ -624,7 +624,7 @@ function Dashboard() {
               Revoke Full Operator Permissions to an Account
             </span>
             <div className="flex items-center justify-center mt-4">
-              <span className="mr-2 p-[6px] bg-[#10bb3514] rounded-xl">
+              <span className="mr-2 p-[6px] bg-[#d2252514] rounded-xl">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="24px"
@@ -717,7 +717,18 @@ function Dashboard() {
               View All Addresses to whom permissions are given
             </span>
             <div className="flex items-center justify-center mt-4 px-2">
-              <span className="mr-2 p-[6px] bg-[#10bb3514] rounded-xl">
+              <div className=" shadow-[#cccccc40] shadow-xl flex items-center justify-between w-25 px-1 py-1 rounded-xl">
+                <Image
+                  src={avatar2}
+                  alt="send stream image"
+                  className="w-8 p-1 rounded-xl"
+                />
+                <div className="flex flex-col w-20 rounded-xl p-1 ">
+                  <div className="bg-[#12141e1c] h-2 w-full content-none rounded-xl mb-1"></div>
+                  <div className="bg-[#12141e1c] h-2 w-1/2 content-none rounded-xl"></div>
+                </div>
+              </div>
+              <span className="ml-2 p-[6px] bg-[#10bb3514] rounded-xl">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   enableBackground="new 0 0 24 24"
@@ -738,17 +749,6 @@ function Dashboard() {
                   </g>
                 </svg>
               </span>
-              <div className=" shadow-[#cccccc40] shadow-xl flex items-center justify-between w-25 px-1 py-1 rounded-xl">
-                <Image
-                  src={avatar2}
-                  alt="send stream image"
-                  className="w-8 p-1 rounded-xl"
-                />
-                <div className="flex flex-col w-20 rounded-xl p-1 ">
-                  <div className="bg-[#12141e1c] h-2 w-full content-none rounded-xl mb-1"></div>
-                  <div className="bg-[#12141e1c] h-2 w-1/2 content-none rounded-xl"></div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

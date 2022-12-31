@@ -59,6 +59,10 @@ export default function Home() {
   const [showRevokeFC, setRevokeFC] = useState(false);
   const [showViewPermissions, setViewPermissions] = useState(false);
 
+  //*********************view permission to revoke page */
+
+  const [operatorAdd, setOperatorAdd] = useState();
+
   useEffect(() => {
     setDashboard(true);
   }, []);
@@ -76,7 +80,7 @@ export default function Home() {
           })}
         >
           <Head>
-            <title>ACL Tool</title>
+            <title>ACL SuperFluid Tool</title>
             <meta
               name="description"
               content="Giving other accounts control over stream operations"
@@ -393,9 +397,13 @@ export default function Home() {
                   ) : showSendStream ? (
                     <SendStream />
                   ) : showRevokeFC ? (
-                    <RevokeFullControl />
+                    <RevokeFullControl operatorAdd={operatorAdd} />
                   ) : showViewPermissions ? (
-                    <ViewPermissions />
+                    <ViewPermissions
+                      setViewPermissions={setViewPermissions}
+                      setRevokeFC={setRevokeFC}
+                      setOperatorAdd={setOperatorAdd}
+                    />
                   ) : null}
                 </div>
               </div>

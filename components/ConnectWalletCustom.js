@@ -39,7 +39,7 @@ function ConnectWalletCustom() {
                 if (!connected) {
                   return (
                     <button
-                      onClick={openConnectModal}
+                      onClick={() => openConnectModal()}
                       type="button"
                       className="w-full bg-[#10bb35] text-[#fff] py-3.5 leading-[1.43]  tracking-[0.17px] rounded-xl flex justify-center items-center font-medium "
                     >
@@ -60,8 +60,27 @@ function ConnectWalletCustom() {
 
                 if (chain.unsupported) {
                   return (
-                    <button onClick={openChainModal} type="button">
-                      Wrong network
+                    <button
+                      onClick={() => openChainModal()}
+                      type="button"
+                      className="hover:bg-[#f9f9f9] rounded-lg"
+                    >
+                      <div className="custom-btn-inside-parent flex justify-between items-center ml-2 py-2 px-3">
+                        <Blockies
+                          className="identicon rounded-lg"
+                          seed={"acl-too"}
+                          size={12}
+                          scale={3}
+                        />
+                        <div className="custom-btn-address pl-[20px] flex justify-start items-center flex-col">
+                          <h2 className="leading-[150%] font-medium tracking-[0.15px] text-[1rem] text-left">
+                            {account.displayName}
+                          </h2>
+                          <h2 className="text-[0.875rem] tracking-[0.17px] leading-[1.43] text-left text-[#d22525]">
+                            Wrong network
+                          </h2>
+                        </div>
+                      </div>
                     </button>
                   );
                 }
@@ -100,7 +119,7 @@ function ConnectWalletCustom() {
                     </button> */}
 
                     <button
-                      onClick={openAccountModal}
+                      onClick={() => openAccountModal()}
                       type="button"
                       className="custom-connect-button hover:bg-[#f9f9f9] rounded-lg"
                     >

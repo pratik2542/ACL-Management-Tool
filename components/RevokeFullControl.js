@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from "react-dropdown-select";
 import options from "../data/options";
 import styled from "@emotion/styled";
 import { ethers } from "ethers";
 import { Framework } from "@superfluid-finance/sdk-core";
 
-function RevokeFullControl() {
+function RevokeFullControl({ operatorAdd }) {
+  // flow operator address
+
+  const [flowOperatorAddress, setFlowOperatorAddress] = useState(
+    operatorAdd ? operatorAdd : ""
+  );
   //integration
   const revokeFullControl = async () => {
     const operatorAddress = document.getElementById(
@@ -76,6 +81,8 @@ function RevokeFullControl() {
             placeholder="Public Address"
             className="w-full input placeholder-gray-700"
             id="flowOperatorAddress"
+            value={flowOperatorAddress}
+            onChange={(e) => setFlowOperatorAddress(e.target.value)}
           />
         </div>
         {/* <div className="input-parent">
