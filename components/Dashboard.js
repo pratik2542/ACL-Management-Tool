@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { createClient } from "urql";
 import { getTransactionDescription } from "@superfluid-finance/sdk-core";
+import ConnectWalletCustom from "./ConnectWalletCustom";
 
 function Dashboard() {
   const { address, isConnected } = useAccount();
@@ -472,52 +473,67 @@ function Dashboard() {
         <h1>"Connect to Superfluid"</h1>
         <p>Connect your wallet, view any wallet, or take a look around!</p>
         <div className="db-grid-sub">
-          <div className="grid-sub">
+          <div className="grid-sub min-h-[120px]">
             <span className="grid-sub-title">Set Permissions</span>
             <span className="grid-sub-info">Update Operator Permissions</span>
           </div>
-          <div className="grid-sub">
+          <div className="grid-sub min-h-[120px]">
             <span className="grid-sub-title">Authorize Full Control</span>
             <span className="grid-sub-info">
               Grant Full Operator Permissions to an Account
             </span>
           </div>
-          <div className="grid-sub">
+          <div className="grid-sub min-h-[120px]">
             <span className="grid-sub-title">Revoke Full Control</span>
             <span className="grid-sub-info">
               Revoke Full Operator Permissions to an Account
             </span>
           </div>
-          <div className="grid-sub">
+          <div className="grid-sub min-h-[120px]">
             <span className="grid-sub-title">Send a Stream</span>
             <span className="grid-sub-info">
               Pick a Sender, Recipient, Token and Network
             </span>
           </div>
-          <div className="grid-sub">
+          <div className="grid-sub min-h-[120px]">
             <span className="grid-sub-title">Modify and Cancle Streams</span>
             <span className="grid-sub-info">
               Update Flow Rate and Delete a Stream using Operator Control
             </span>
+            <div className="edit-delete flex items-center justify-center mt-4">
+              <button className="p-[6px] bg-[#10bb3514] rounded-xl">
+                <svg
+                  className="fill-[#10bb35] w-6"
+                  focusable="false"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  data-testid="EditIcon"
+                >
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>
+                </svg>
+              </button>
+              <button className="p-[6px] bg-[#d2252514] rounded-xl ml-3">
+                <svg
+                  className="fill-[#d22525] w-6"
+                  focusable="false"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  data-testid="CancelIcon"
+                >
+                  <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path>
+                </svg>
+              </button>
+            </div>
           </div>
-          <div className="grid-sub">
+          <div className="grid-sub min-h-[120px]">
             <span className="grid-sub-title">View Permissions</span>
             <span className="grid-sub-info">
               View All Addresses to whom permissions are given
             </span>
           </div>
         </div>
-        <div className="connect-wallet">
-          <ConnectButton
-            accountStatus={{
-              smallScreen: "avatar",
-              largeScreen: "full",
-            }}
-            showBalance={{
-              smallScreen: false,
-              largeScreen: true,
-            }}
-          />
+        <div className="custom-wallet w-80 mx-auto my-8">
+          <ConnectWalletCustom />
         </div>
       </div>
     </div>
