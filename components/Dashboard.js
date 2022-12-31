@@ -4,6 +4,9 @@ import { useAccount } from "wagmi";
 import { createClient } from "urql";
 import { getTransactionDescription } from "@superfluid-finance/sdk-core";
 import ConnectWalletCustom from "./ConnectWalletCustom";
+import { sign } from "crypto";
+import { ethers } from "ethers";
+import { Framework } from "@superfluid-finance/sdk-core";
 
 function Dashboard() {
   const { address, isConnected } = useAccount();
@@ -18,6 +21,8 @@ function Dashboard() {
   const [allData, setAllData] = useState([]);
   const [incomingData, setIncomingData] = useState([]);
   const [outgoingData, setOutgoingData] = useState([]);
+  const [total, setTotal] = useState([]);
+  const [balance, setBalane] = useState();
   const monthNames = [
     "Jan",
     "Feb",
@@ -84,6 +89,8 @@ function Dashboard() {
     const data = loadedData_outgoing.data.flowUpdatedEvents;
 
     const data1 = loadedData_incoming.data.flowUpdatedEvents;
+    total.push([data.length + data1.length, data.length, data1.length]);
+    setTotal(total);
 
     console.log(loadedData_outgoing);
     console.log(loadedData_incoming);
@@ -100,24 +107,20 @@ function Dashboard() {
           data[i].sender,
           data[i].receiver,
           data[i].flowOperator,
-          parseFloat(
-            data[i].totalAmountStreamedUntilTimestamp / 10 ** 18
-          ).toFixed(15),
+          ethers.utils.formatEther(data[i].totalAmountStreamedUntilTimestamp),
           date,
         ]);
         allData.push([
           data[i].receiver,
           data[i].flowOperator,
-          parseFloat(
-            data[i].totalAmountStreamedUntilTimestamp / 10 ** 18
-          ).toFixed(15),
+          ethers.utils.formatEther(data[i].totalAmountStreamedUntilTimestamp),
           date,
           true,
         ]);
       }
     }
 
-    for (let i = 0; i < data1.length; i++) {
+    for (let i = data1.length - 1; i >= 0; i--) {
       if (!incomingData.find((item) => loadedData_incoming[0] === item[0])) {
         const d = new Date(parseInt(data1[i].timestamp) * 1000);
         const date =
@@ -130,17 +133,13 @@ function Dashboard() {
           data1[i].sender,
           data1[i].receiver,
           data1[i].flowOperator,
-          parseFloat(
-            data1[i].totalAmountStreamedUntilTimestamp / 10 ** 18
-          ).toFixed(15),
+          ethers.utils.formatEther(data1[i].totalAmountStreamedUntilTimestamp),
           date,
         ]);
         allData.push([
           data1[i].sender,
           data1[i].flowOperator,
-          parseFloat(
-            data1[i].totalAmountStreamedUntilTimestamp / 10 ** 18
-          ).toFixed(15),
+          ethers.utils.formatEther(data1[i].totalAmountStreamedUntilTimestamp),
           date,
           false,
         ]);
@@ -155,6 +154,38 @@ function Dashboard() {
     console.log(allData);
   };
 
+  const getBalance = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const account = await signer.getAddress();
+
+        const sf = await Framework.create({
+          chainId: 5,
+          provider: provider,
+        });
+
+        const DAIxContract = await sf.loadSuperToken("fDAIx");
+        const DAIx = DAIxContract.address;
+
+        try {
+          const b = await DAIxContract.balanceOf({
+            account: account,
+            providerOrSigner: signer,
+          });
+          const bal = ethers.utils.formatEther(b);
+          setBalane(bal);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setDropDown(false);
     setDropDownAll(false);
@@ -162,7 +193,10 @@ function Dashboard() {
     setDropDownOutgoing(false);
   }, []);
 
-  // console.log(address);
+  useEffect(() => {
+    getBalance();
+  });
+
   if (isConnected) {
     return (
       <div className="db-main">
@@ -282,7 +316,7 @@ function Dashboard() {
                         </div>
                       </td>
                       <td>
-                        <h4 className="token-balance">1000</h4>
+                        <h4 className="token-balance">{balance}</h4>
                       </td>
                       <td>-</td>
                       <td>-</td>
@@ -332,7 +366,9 @@ function Dashboard() {
                                             setDropDownOutgoing(false);
                                           }}
                                         >
-                                          All
+                                          {total.length > 0
+                                            ? "All (" + total[0][0] + ")"
+                                            : "All"}
                                         </button>
                                         <button
                                           className={
@@ -344,7 +380,9 @@ function Dashboard() {
                                             setDropDownOutgoing(false);
                                           }}
                                         >
-                                          Incoming
+                                          {total.length > 0
+                                            ? "Incoming (" + total[0][2] + ")"
+                                            : "Incoming"}
                                         </button>
                                         <button
                                           className={
@@ -356,7 +394,9 @@ function Dashboard() {
                                             setDropDownOutgoing(true);
                                           }}
                                         >
-                                          Outgoing
+                                          {total.length > 0
+                                            ? "Outgoing (" + total[0][1] + ")"
+                                            : "Outgoing"}
                                         </button>
                                       </div>
                                     </div>
@@ -470,7 +510,7 @@ function Dashboard() {
   return (
     <div className="db-main">
       <div className="db-sub">
-        <h1>"Connect to Superfluid"</h1>
+        <h1>Connect to Superfluid</h1>
         <p>Connect your wallet, view any wallet, or take a look around!</p>
         <div className="db-grid-sub">
           <div className="grid-sub min-h-[120px]">

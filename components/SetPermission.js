@@ -8,6 +8,7 @@ import { permissions } from "../data/permissions";
 
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+import { set } from "immutable";
 
 function SetPermission() {
   // usestate for input permission value
@@ -16,13 +17,11 @@ function SetPermission() {
   const [tokenValue, setTokenValue] = useState("Enter Token Amount in Wei");
   //integration
   const updateFlowPermission = async () => {
-    // console.log("Inside");
     const operatorAddress = document.getElementById(
       "flowOperatorAddress"
     ).value;
-    // console.log(operatorAddress);
     const flowRate = document.getElementById("flowRate").value;
-    // console.log(flowRate);
+    const permission = permissionValue[0].value;
 
     try {
       const { ethereum } = window;
@@ -43,7 +42,7 @@ function SetPermission() {
           const updateFlowOperatorOperation =
             sf.cfaV1.updateFlowOperatorPermissions({
               flowOperator: operatorAddress,
-              permissions: 7,
+              permissions: permission,
               flowRateAllowance: flowRate,
               superToken: DAIx,
             });
@@ -99,13 +98,14 @@ function SetPermission() {
         <div className="input-parent">
           <h4>Permissions</h4>
           <StyledSelect
+            id="permission"
             options={permissions}
             placeholder="Select Permission"
             values={[]}
             labelField="label"
             valueField="value"
             searchBy="value"
-            onChange={(value) => console.log(value)}
+            onChange={(value) => setPermissionValue(value)}
             color={"#10bb34"}
             minHeight={"54px"}
           />
