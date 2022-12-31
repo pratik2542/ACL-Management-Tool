@@ -36,11 +36,10 @@ function ViewPermissions({ setViewPermissions, setRevokeFC, setOperatorAdd }) {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const account = await signer.getAddress();
-      const a = "0xf96b82579B8f4E0357908AE50a10f2287A19Baa9";
       const query1 = `
         query {
           flowOperators(
-            where: {sender: ${account}"}
+            where: {sender:"${account}"}
           ) {
             flowOperator
             permissions
@@ -50,9 +49,9 @@ function ViewPermissions({ setViewPermissions, setRevokeFC, setOperatorAdd }) {
       const client = createClient({
         url: APIURL,
       });
+      const result1 = await client.query(query1).toPromise();
 
       const result = await client.query(query).toPromise();
-      const result1 = await client.query(query1).toPromise();
       console.log(result1);
       console.log(account);
 
