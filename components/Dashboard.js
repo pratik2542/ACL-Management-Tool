@@ -86,13 +86,20 @@ function Dashboard() {
       .toPromise();
 
     const data = loadedData_outgoing.data.flowUpdatedEvents;
-
     const data1 = loadedData_incoming.data.flowUpdatedEvents;
+    const data2 = loadedData_outgoing.data.flowUpdatedEvents;
     total.push([data.length + data1.length, data.length, data1.length]);
     setTotal(total);
 
     console.log(loadedData_outgoing);
     console.log(loadedData_incoming);
+
+    data.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp));
+    data1.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp));
+    // Array.prototype.push.apply(data2, data1);
+    // data2.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp));
+    // console.log(data2);
+
     for (let i = 0; i < data.length; i++) {
       if (!outgoingData.find((item) => loadedData_outgoing[0] === item[0])) {
         const d = new Date(parseInt(data[i].timestamp) * 1000);
@@ -115,11 +122,12 @@ function Dashboard() {
           ethers.utils.formatEther(data[i].totalAmountStreamedUntilTimestamp),
           date,
           true,
+          data[i].timestamp,
         ]);
       }
     }
 
-    for (let i = data1.length - 1; i >= 0; i--) {
+    for (let i = 0; i < data1.length; i++) {
       if (!incomingData.find((item) => loadedData_incoming[0] === item[0])) {
         const d = new Date(parseInt(data1[i].timestamp) * 1000);
         const date =
@@ -141,10 +149,11 @@ function Dashboard() {
           ethers.utils.formatEther(data1[i].totalAmountStreamedUntilTimestamp),
           date,
           false,
+          data1[i].timestamp,
         ]);
       }
     }
-
+    allData.sort((a, b) => parseInt(b[5]) - parseInt(a[5]));
     setOutgoingData(outgoingData);
     setIncomingData(incomingData);
     setAllData(allData);
