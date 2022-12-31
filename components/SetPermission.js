@@ -101,10 +101,10 @@ function SetPermission() {
             id="permission"
             options={permissions}
             placeholder="Select Permission"
-            values={[]}
+            values={permissionValue}
             labelField="label"
             valueField="value"
-            searchBy="value"
+            searchBy="label"
             onChange={(value) => setPermissionValue(value)}
             color={"#10bb34"}
             minHeight={"54px"}

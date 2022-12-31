@@ -8,6 +8,7 @@ import gif from "../public/stream-loop.gif";
 import avatar1 from "../public/avatar-image.gif";
 import avatar2 from "../public/avatar2.png";
 import avatar3 from "../public/avatar3.png";
+import avatar4 from "../public/avatar4.png";
 
 import Image from "next/image";
 
@@ -669,7 +670,7 @@ function Dashboard() {
               </span>
               <div className=" shadow-[#cccccc40] shadow-xl flex justify-between w-30 px-1 py-1 rounded-xl">
                 <Image
-                  src={avatar2}
+                  src={avatar4}
                   alt="send stream image"
                   className="w-8 p-1 rounded-xl"
                 />
@@ -741,7 +742,7 @@ function Dashboard() {
                 <Image
                   src={avatar2}
                   alt="send stream image"
-                  className="w-6 p-1 rounded-xl"
+                  className="w-8 p-1 rounded-xl"
                 />
                 <div className="flex flex-col w-20 rounded-xl p-1 ">
                   <div className="bg-[#12141e1c] h-2 w-full content-none rounded-xl mb-1"></div>
