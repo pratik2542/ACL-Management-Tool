@@ -44,7 +44,7 @@
   justify-content: center;
   gap: 28px;
   display: grid;
-  grid-template-columns: repeat(3, 290px);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .db-sub div.db-grid-sub div.grid-sub {
@@ -67,14 +67,14 @@ div.grid-sub span {
 
 div.grid-sub span.grid-sub-title {
   margin: 0px;
-  font-size: 1.125rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   font-family: Walsheim, Arial;
   line-height: 1.334;
 }
 div.grid-sub span.grid-sub-info {
-  margin: 0px;
-  font-size: 0.875rem;
+  margin: 5px 0px;
+  font-size: 0.754rem;
   font-weight: 400;
   letter-spacing: 0.17px;
   font-family: Walsheim, Arial;
